@@ -11,6 +11,7 @@ use sdl2::keyboard::Keycode;
 use sdl2::rect::Rect;
 
 const DISPLAY_SIZE: usize = 128;
+const SCALE: u32 = 5;
 
 pub struct Display {
     pixels: [[bool; DISPLAY_SIZE]; DISPLAY_SIZE],
@@ -23,7 +24,7 @@ impl Display {
         let sdl_context = sdl2::init().unwrap();
         let video_subsystem = sdl_context.video().unwrap();
 
-        let window = video_subsystem.window("graphics-emulator", DISPLAY_SIZE as u32, DISPLAY_SIZE as u32)
+        let window = video_subsystem.window("graphics-emulator", DISPLAY_SIZE as u32 * SCALE, DISPLAY_SIZE as u32 * SCALE)
             .position_centered()
             .build()
             .unwrap();
@@ -58,9 +59,9 @@ impl Display {
         for (y, line) in self.pixels.iter().enumerate() {
             for (x, value) in line.iter().enumerate() {
                 if *value {
-                    let x = x as i32;
-                    let y = y as i32;
-                    self.canvas.fill_rect(Rect::new(x, y, 1, 1)).unwrap();
+                    let x = x as i32 * SCALE as i32;
+                    let y = y as i32 * SCALE as i32;
+                    self.canvas.fill_rect(Rect::new(x, y, SCALE, SCALE)).unwrap();
                 }
             }
         }
